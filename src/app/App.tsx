@@ -3,9 +3,10 @@ import './App.scss';
 import { Loging } from './login/Login';
 import { Appointment } from './appointment/Appointment';
 import { Information } from './information/Information';
-import { Button } from 'antd-mobile';
 
-import 'antd-mobile/dist/antd-mobile.css';
+// import 'antd-mobile/dist/antd-mobile.css';
+import Button from 'antd-mobile/lib/button';
+import 'antd-mobile/lib/button/style/css'
 
 const App: React.FC = () => {
   return (
