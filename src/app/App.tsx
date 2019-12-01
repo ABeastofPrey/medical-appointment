@@ -1,6 +1,9 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+// import { Loging } from './login/Login';
+import { Appointment } from './appointment/Appointment';
+// import { Information } from './information/Information';
 
 const App: React.FC = () => {
   return (
@@ -8,7 +11,7 @@ const App: React.FC = () => {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.tsx</code> and save to reload!
+          Edit <code>src/App.tsx</code> and save to reload.
         </p>
         <a
           className="App-link"
@@ -18,6 +21,9 @@ const App: React.FC = () => {
         >
           Learn React
         </a>
+        <div>
+          <span>here</span>
+        </div>
       </header>
     </div>
   );
