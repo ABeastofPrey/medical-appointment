@@ -11,6 +11,7 @@ export class Footer extends React.Component {
             selectedTab: 'appointment',
         };
     }
+
     render() {
         return (
             <div>
@@ -30,8 +31,10 @@ export class Footer extends React.Component {
                             this.setState({
                                 selectedTab: 'appointment',
                             });
+                            // this.history.push(RouteConfig.Main);
                         }}
-                    ><span>Appointment</span></TabBar.Item>
+                    >
+                    </TabBar.Item>
                     <TabBar.Item
                         icon={(<Icon type="cross-circle-o"></Icon>)}
                         selectedIcon={(<Icon type="cross-circle"></Icon>)}
@@ -44,7 +47,6 @@ export class Footer extends React.Component {
                             });
                         }}
                     >
-                        <span>Personal center</span>
                     </TabBar.Item>
                 </TabBar>
             </div>
