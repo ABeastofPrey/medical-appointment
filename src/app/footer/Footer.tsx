@@ -1,6 +1,10 @@
 import React from 'react';
-import './Footer.scss';
 import { TabBar, Icon } from 'antd-mobile';
+import { Center } from '../center/Center';
+import { Appointment } from '../appointment/Appointment';
+import { Information } from '../information/Information';
+import { Header } from '../header/Header';
+import './Footer.scss';
 
 export class Footer extends React.Component {
     readonly state: any;
@@ -8,13 +12,24 @@ export class Footer extends React.Component {
     constructor(props: any) {
         super(props);
         this.state = {
-            selectedTab: 'appointment',
+            selectedTab: 'main',
         };
+    }
+
+    private renderCenter(): any {
+        return (
+            <div>
+                <Header />
+                <Center>
+                    {this.state.selectedTab === 'main' ? <Appointment /> : <Information />}
+                </Center>
+            </div>
+        );
     }
 
     render() {
         return (
-            <div>
+            <div className="App-footer">
                 <TabBar
                     unselectedTintColor="#949494"
                     tintColor="#33A3F4"
@@ -24,16 +39,16 @@ export class Footer extends React.Component {
                         icon={(<Icon type="check"></Icon>)}
                         selectedIcon={(<Icon type="check-circle"></Icon>)}
                         title="Appointment"
-                        key="appointment"
+                        key="main"
                         // dot
-                        selected={this.state.selectedTab === 'appointment'}
+                        selected={this.state.selectedTab === 'main'}
                         onPress={() => {
                             this.setState({
-                                selectedTab: 'appointment',
+                                selectedTab: 'main',
                             });
-                            // this.history.push(RouteConfig.Main);
                         }}
                     >
+                        {this.renderCenter()}
                     </TabBar.Item>
                     <TabBar.Item
                         icon={(<Icon type="cross-circle-o"></Icon>)}
@@ -47,6 +62,7 @@ export class Footer extends React.Component {
                             });
                         }}
                     >
+                        {this.renderCenter()}
                     </TabBar.Item>
                 </TabBar>
             </div>
