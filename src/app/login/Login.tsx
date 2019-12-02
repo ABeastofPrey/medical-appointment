@@ -1,8 +1,28 @@
 import React from "react";
-// import './Login.scss';
+import { List, InputItem, Button } from 'antd-mobile';
+import './Login.scss';
 
-export const Loging: React.FC = () => (
-    <div>
-        <h1>Login module</h1>
-    </div>
-);
+const { Item } = List;
+
+export class Loging extends React.Component {
+    readonly props: any;
+    readonly state: any;
+    
+    constructor(props: any) {
+        super(props);
+        this.state = { };
+    }
+
+    public render(): any {
+        return (
+            <form>
+                <List
+                    renderHeader={() => 'Form Validation'}
+                    // renderFooter={() => "getFieldError('account') && getFieldError('account').join(',')"}
+                >
+
+                </List>
+            </form>
+        );
+    }
+}
