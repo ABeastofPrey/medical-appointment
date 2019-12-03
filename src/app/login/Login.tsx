@@ -6,13 +6,16 @@ import './Login.scss';
 const { Item } = List;
 
 class LogingForm extends React.Component {
-    readonly props: { form: formShape };
+    readonly props: {
+        form: formShape,
+        onLogin: Function
+    }
     readonly state: {
         phone: string,
         invalidPhone: boolean,
         captcha: string,
         invalidCaptcha: boolean,
-    };
+    }
 
     constructor(props: any) {
         super(props);
@@ -26,8 +29,7 @@ class LogingForm extends React.Component {
 
     private submitForm(): void {
         if (this.state.invalidPhone || this.state.invalidCaptcha || !this.state.phone || !this.state.captcha) return;
-        console.log(this.state.phone);
-        console.log(this.state.captcha);
+        this.props.onLogin();
     }
 
     private phoneChangeHandler(phone: string): void {

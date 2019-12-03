@@ -11,10 +11,15 @@ export class App extends React.Component {
         this.state = { isLogin: false };
     }
 
+    public onLoginHandler(): void {
+        console.log('login')
+        this.setState({ isLogin: true });
+    }
+
     public render(): any {
         return (
             <div className="App">
-                {this.state.isLogin ? <AppTabs /> : <Loging />}
+                {this.state.isLogin ? <AppTabs /> : <Loging onLogin={this.onLoginHandler.bind(this)}/>}
             </div>
         );
     }
