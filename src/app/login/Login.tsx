@@ -1,5 +1,5 @@
 import React from "react";
-import { List, InputItem, Button, Toast, Tag } from 'antd-mobile';
+import { List, InputItem, Button, Toast, Flex, WhiteSpace } from 'antd-mobile';
 import { createForm, formShape } from 'rc-form';
 import './Login.scss';
 
@@ -9,89 +9,101 @@ class LogingForm extends React.Component {
     readonly props: { form: formShape };
     readonly state: {
         phone: string,
-        validPhone: boolean,
+        invalidPhone: boolean,
         captcha: string,
-        validCaptcha: boolean,
+        invalidCaptcha: boolean,
     };
 
     constructor(props: any) {
         super(props);
         this.state = {
             phone: null,
-            validPhone: false,
+            invalidPhone: false,
             captcha: null,
-            validCaptcha: false,
+            invalidCaptcha: false,
         };
     }
 
     private submitForm(): void {
-        if (this.state.validPhone || this.state.validCaptcha || !this.state.phone || !this.state.captcha) return;
+        if (this.state.invalidPhone || this.state.invalidCaptcha || !this.state.phone || !this.state.captcha) return;
         console.log(this.state.phone);
         console.log(this.state.captcha);
     }
 
     private phoneChangeHandler(phone: string): void {
         if (phone.replace(/\s/g, '').length < 11) {
-            this.setState({ validPhone: true });
+            this.setState({ invalidPhone: true });
         } else {
-            this.setState({ validPhone: false });
+            this.setState({ invalidPhone: false });
         }
         this.setState({ phone });
     }
 
     private errorClickHandler(): void {
-        if (this.state.validPhone) {
+        if (this.state.invalidPhone) {
             Toast.info('Please enter 11 digits');
         }
-        if (this.state.validCaptcha) {
+        if (this.state.invalidCaptcha) {
             Toast.info('Please enter correct captcha');
         }
     }
 
     private captchaChangeHandler(captcha: string): void {
-        if (captcha.replace(/\s/g, '').length <= 4) {
-            this.setState({ validCaptcha: true });
-            this.setState({ captcha });
+        if (captcha.replace(/\s/g, '').length < 4) {
+            this.setState({ invalidCaptcha: true });
         } else {
-            this.setState({ validCaptcha: false });
+            this.setState({ invalidCaptcha: false });
         }
+        this.setState({ captcha });
     }
 
     public render(): any {
+        const { getFieldProps, getFieldError } = this.props.form;
+        const invalidPhone = this.state.invalidPhone || !this.state.phone;
+        const invalidCaptcha = this.state.invalidCaptcha || !this.state.captcha;
+        const invalid = invalidCaptcha || invalidPhone;
         return (
-            <form style={{height: "100%"}}>
-                <List
-                    renderHeader={() => 'Form Validation'}
-                // renderFooter={() => "getFieldError('account') && getFieldError('account').join(',')"}
-                >
-                    <InputItem
-                        clear
-                        type="phone"
-                        placeholder="input your phone"
-                        value={this.state.phone}
-                        error={this.state.validPhone}
-                        onErrorClick={this.errorClickHandler.bind(this)}
-                        onChange={this.phoneChangeHandler.bind(this)}
+            <Flex className="Login" direction="row" justify="center" align="center">
+                <Flex.Item>
+                    <List
+                        renderHeader={() => '电话号码登陆'}
+                        renderFooter={() => getFieldError('account') && getFieldError('account').join(',')}
                     >
-                        Phone
-                    </InputItem>
-                    <InputItem
-                        clear
-                        type="digit"
-                        placeholder="input validation code"
-                        value={this.state.captcha}
-                        error={this.state.validCaptcha}
-                        onErrorClick={this.errorClickHandler.bind(this)}
-                        onChange={this.captchaChangeHandler.bind(this)}
-                        extra={<Button className="extra-btn" type="primary" size="small" inline>retry</Button>}
-                    >
-                        Captcha
-                    </InputItem>
-                    <Item>
-                        <Button type="primary" onClick={this.submitForm.bind(this)}>Login</Button>
-                    </Item>
-                </List>
-            </form>
+                        <Item>
+                            <InputItem
+                                clear
+                                type="phone"
+                                placeholder="请输入手机号码"
+                                value={this.state.phone}
+                                error={this.state.invalidPhone}
+                                onErrorClick={this.errorClickHandler.bind(this)}
+                                onChange={this.phoneChangeHandler.bind(this)}
+                            >
+                                电话
+                            </InputItem>
+                        </Item>
+                        <Item extra={<Button className="captcha-btn" type="ghost" inline>验证码</Button>}>
+                            <InputItem
+                                clear
+                                type="digit"
+                                placeholder="请输入验证码"
+                                value={this.state.captcha}
+                                error={this.state.invalidCaptcha}
+                                onErrorClick={this.errorClickHandler.bind(this)}
+                                onChange={this.captchaChangeHandler.bind(this)}
+                            >
+                                验证码
+                            </InputItem>
+                        </Item>
+                        <WhiteSpace size="lg"/>
+                        <Item>
+                            <Button type="primary" disabled={invalid} onClick={this.submitForm.bind(this)}>登陆</Button>
+                        </Item>
+                    </List>
+                </Flex.Item>
+            </Flex>
+            // <form style={{height: "100%"}}>
+            // </form>
         );
     }
 }
