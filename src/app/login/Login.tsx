@@ -20,9 +20,9 @@ class LogingForm extends React.Component {
     constructor(props: any) {
         super(props);
         this.state = {
-            phone: null,
+            phone: '',
             invalidPhone: false,
-            captcha: null,
+            captcha: '',
             invalidCaptcha: false,
         };
     }
@@ -59,6 +59,14 @@ class LogingForm extends React.Component {
         this.setState({ captcha });
     }
 
+    private validateAccount(rule, value, callback): void {
+        if (value && value.length > 4) {
+            callback();
+        } else {
+            callback(new Error('At least four characters for account'));
+        }
+    }
+
     public render(): any {
         const { getFieldProps, getFieldError } = this.props.form;
         const invalidPhone = this.state.invalidPhone || !this.state.phone;
@@ -84,28 +92,47 @@ class LogingForm extends React.Component {
                                 电话
                             </InputItem>
                         </Item>
-                        <Item extra={<Button className="captcha-btn" type="ghost" inline>验证码</Button>}>
+                        {/* <Item extra={<Button className="captcha-btn" type="ghost" inline>验证码</Button>}>
                             <InputItem
                                 clear
                                 type="digit"
                                 placeholder="请输入验证码"
                                 value={this.state.captcha}
-                                error={this.state.invalidCaptcha}
+                                error={!!getFieldError('account')}
                                 onErrorClick={this.errorClickHandler.bind(this)}
                                 onChange={this.captchaChangeHandler.bind(this)}
                             >
                                 验证码
                             </InputItem>
+                        </Item> */}
+                        <Item extra={<Button className="captcha-btn" type="ghost" inline>验证码</Button>}>
+                            <InputItem
+                                {...getFieldProps('account', {
+                                    rules: [
+                                        { required: true, message: 'Please input account' },
+                                        { validator: this.validateAccount },
+                                    ],
+                                })}
+                                clear
+                                type="digit"
+                                placeholder="请输入验证码"
+                                // value={this.state.captcha}
+                                error={!!getFieldError('account')}
+                                onErrorClick={() => {
+                                    alert(getFieldError('account').join('、'));
+                                }}
+                                // onChange={this.captchaChangeHandler.bind(this)}
+                            >
+                                验证码
+                        </InputItem>
                         </Item>
-                        <WhiteSpace size="lg"/>
+                        <WhiteSpace size="lg" />
                         <Item>
                             <Button type="primary" disabled={invalid} onClick={this.submitForm.bind(this)}>登陆</Button>
                         </Item>
                     </List>
                 </Flex.Item>
             </Flex>
-            // <form style={{height: "100%"}}>
-            // </form>
         );
     }
 }
