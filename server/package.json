@@ -1,0 +1,32 @@
+{
+  "name": "coa-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "ABeastofPrey",
+  "license": "MIT",
+  "scripts": {
+    "start": "tsnd --respawn --notify=false --transpileOnly --pretty=true index.ts",
+    "lint": "tslint 'src/**/*.ts' "
+  },
+  "devDependencies": {
+    "@types/koa": "^2.0.48",
+    "@types/koa-router": "^7.0.40",
+    "@types/node": "^11.13.2",
+    "@types/pino": "^5.8.6",
+    "@types/ramda": "^0.26.6",
+    "pino-pretty": "^2.6.0",
+    "ts-node-dev": "^1.0.0-pre.32",
+    "tslint": "^5.15.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "typescript": "^3.4.2"
+  },
+  "dependencies": {
+    "koa": "^2.7.0",
+    "koa-body": "^4.1.0",
+    "koa-router": "^7.4.0",
+    "pino": "^5.12.2",
+    "ramda": "^0.26.1",
+    "ramda-adjunct": "^2.16.1"
+  }
+}
