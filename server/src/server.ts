@@ -11,7 +11,7 @@ const portPath = path(['env', 'Port']);
 
 const logger = pino({ prettyPrint: { colorize: true, ignore: 'time' } });
 
-const trace = x => { logger.info(x); return x; };
+const startLog = x => { logger.info(x); return x; };
 
 const getPort = ifElse(isNil, always(8080), always);
 
@@ -21,6 +21,6 @@ const registRoutes = _app => _app.use(routes);
 
 const listen = (port: number) => koa.listen(port);
 
-const listenOnPort = compose(listen, trace, getPort, always(portPath(process)));
+const listenOnPort = compose(listen, startLog, getPort, always(portPath(process)));
 
 export const startServer = () => compose(listenOnPort, registRoutes)(koa);
