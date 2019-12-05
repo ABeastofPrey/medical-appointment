@@ -1,7 +1,7 @@
-import * as pino from 'pino';
-import * as Koa from 'koa';
-import { Server } from 'http';
-import * as notifier from 'node-notifier';
+import pino from 'pino';
+import Koa from 'koa';
+// import { Server } from 'http';
+// import * as notifier from 'node-notifier';
 import { routes } from './modules/user/routes';
 import { compose, ifElse, isNil, path, always } from 'ramda';
 
