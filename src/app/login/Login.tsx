@@ -5,6 +5,11 @@ import './Login.scss';
 
 const { Item } = List;
 
+enum Options {
+    Phone = 'phoneNumber',
+    Captcha = 'validationCode',
+}
+
 class LogingForm extends React.Component {
     readonly props: {
         form: formShape,
@@ -50,25 +55,39 @@ class LogingForm extends React.Component {
         }
     }
 
-    private captchaChangeHandler(captcha: string): void {
-        if (captcha.replace(/\s/g, '').length < 4) {
-            this.setState({ invalidCaptcha: true });
+    // private captchaChangeHandler(captcha: string): void {
+    //     if (captcha.replace(/\s/g, '').length < 4) {
+    //         this.setState({ invalidCaptcha: true });
+    //     } else {
+    //         this.setState({ invalidCaptcha: false });
+    //     }
+    //     this.setState({ captcha });
+    // }
+
+    private validatePhone(rule, value, callback): void {
+        if (value.replace(/\s/g, '').length < 11) {
+            callback();
         } else {
-            this.setState({ invalidCaptcha: false });
+            callback(new Error('Please enter 11 digits'));
         }
-        this.setState({ captcha });
     }
 
-    private validateAccount(rule, value, callback): void {
+    private validateCaptcha(rule, value, callback): void {
         if (value && value.length > 4) {
             callback();
         } else {
-            callback(new Error('At least four characters for account'));
+            callback(new Error('At least four characters for validation code'));
         }
     }
 
     private captchaClick(): void {
-        throw new Error('I crashed!');
+        this.props.form.validateFields({ force: true }, (error) => {
+            if (!error) {
+                console.log(this.props.form.getFieldsValue());
+            } else {
+                alert('Validation failed');
+            }
+        });
     }
 
     public render(): any {
@@ -81,54 +100,45 @@ class LogingForm extends React.Component {
                 <Flex.Item>
                     <List
                         renderHeader={() => '电话号码登陆'}
-                        renderFooter={() => getFieldError('account') && getFieldError('account').join(',')}
+                        renderFooter={() => getFieldError(Options.Captcha) && getFieldError(Options.Captcha).join(',')}
                     >
                         <Item>
                             <InputItem
-                                clear
-                                type="phone"
+                                {...getFieldProps(Options.Phone, {
+                                    rules: [
+                                        { required: true, message: 'Please input validation code' },
+                                        { validator: this.validatePhone },
+                                    ],
+                                })}
+                                clear type="phone"
                                 placeholder="请输入手机号码"
                                 value={this.state.phone}
-                                error={this.state.invalidPhone}
+                                // error={this.state.invalidPhone}
+                                error={!!getFieldError(Options.Phone)}
                                 onErrorClick={this.errorClickHandler.bind(this)}
-                                onChange={this.phoneChangeHandler.bind(this)}
+                                // onChange={this.phoneChangeHandler.bind(this)}
                             >
                                 电话
                             </InputItem>
                         </Item>
-                        {/* <Item extra={<Button className="captcha-btn" type="ghost" inline>验证码</Button>}>
+                        <Item extra={<Button className="captcha-btn" type="ghost" onClick={this.captchaClick.bind(this)} inline>验证码</Button>}>
                             <InputItem
-                                clear
-                                type="digit"
+                                {...getFieldProps(Options.Captcha, {
+                                    rules: [
+                                        { required: true, message: 'Please input validation code' },
+                                        { validator: this.validateCaptcha },
+                                    ],
+                                })}
+                                clear type="digit"
                                 placeholder="请输入验证码"
-                                value={this.state.captcha}
-                                error={!!getFieldError('account')}
-                                onErrorClick={this.errorClickHandler.bind(this)}
-                                onChange={this.captchaChangeHandler.bind(this)}
+                                error={!!getFieldError(Options.Captcha)}
+                                onErrorClick={() => {
+                                    // alert(getFieldError(Options.Captcha).join('、'));
+                                    this.errorClickHandler();
+                                }}
                             >
                                 验证码
                             </InputItem>
-                        </Item> */}
-                        <Item extra={<Button className="captcha-btn" type="ghost" onClick={this.captchaClick.bind(this)} inline>验证码</Button>}>
-                            <InputItem
-                                {...getFieldProps('account', {
-                                    rules: [
-                                        { required: true, message: 'Please input account' },
-                                        { validator: this.validateAccount },
-                                    ],
-                                })}
-                                clear
-                                type="digit"
-                                placeholder="请输入验证码"
-                                // value={this.state.captcha}
-                                error={!!getFieldError('account')}
-                                onErrorClick={() => {
-                                    alert(getFieldError('account').join('、'));
-                                }}
-                                // onChange={this.captchaChangeHandler.bind(this)}
-                            >
-                                验证码
-                        </InputItem>
                         </Item>
                         <WhiteSpace size="lg" />
                         <Item>
