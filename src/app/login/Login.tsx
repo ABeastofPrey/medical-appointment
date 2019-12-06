@@ -67,6 +67,10 @@ class LogingForm extends React.Component {
         }
     }
 
+    private captchaClick(): void {
+        throw new Error('I crashed!');
+    }
+
     public render(): any {
         const { getFieldProps, getFieldError } = this.props.form;
         const invalidPhone = this.state.invalidPhone || !this.state.phone;
@@ -105,7 +109,7 @@ class LogingForm extends React.Component {
                                 验证码
                             </InputItem>
                         </Item> */}
-                        <Item extra={<Button className="captcha-btn" type="ghost" inline>验证码</Button>}>
+                        <Item extra={<Button className="captcha-btn" type="ghost" onClick={this.captchaClick.bind(this)} inline>验证码</Button>}>
                             <InputItem
                                 {...getFieldProps('account', {
                                     rules: [
