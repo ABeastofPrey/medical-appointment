@@ -2,12 +2,16 @@ import React from 'react';
 import { createForm, formShape } from 'rc-form';
 import { List, InputItem, Button, Toast, Flex, WhiteSpace } from 'antd-mobile';
 import { always } from 'ramda';
-import './Login.scss';
+import { interval } from 'rxjs';
+import { take, map as rxjsMap } from 'rxjs/operators';
+import './sign-in.scss';
 
 enum Options {
     Phone = 'phoneNumber',
     Captcha = 'validationCode',
 }
+
+const { useState, useEffect } = React;
 
 const { Item: ListItem } = List;
 
@@ -30,6 +34,8 @@ const vcodeValidator = (rule, value: string, callback: Function) => {
 
 const SignInForm = (props: { form: formShape, onLogin: Function }) => {
     const { getFieldProps, getFieldError } = props.form;
+    const [vcodeStatus, setVcodeStatus] = useState(false);
+    const [timer, setTimer] = useState(59);
     const phoneFiled = getFieldProps(Options.Phone, {
         rules: [
             { required: true, message: '请输入手机号' },
@@ -42,24 +48,57 @@ const SignInForm = (props: { form: formShape, onLogin: Function }) => {
             { validator: vcodeValidator }
         ],
     });
-    const errorTip = () => getFieldError(Options.Phone) || getFieldError(Options.Captcha);
-    const {[Options.Phone]: phone, [Options.Captcha]: vcode } = props.form.getFieldsValue();
+    const errorTip = getFieldError(Options.Phone) || getFieldError(Options.Captcha);
+    const { [Options.Phone]: phone, [Options.Captcha]: vcode } = props.form.getFieldsValue();
     const hasEmpty = !phone || !vcode;
-    const hasEmptyOrInvalid = hasEmpty || errorTip();
+    const hasEmptyOrInvalid = hasEmpty || errorTip;
+    const getVcode = () => {
+        setVcodeStatus(true);
+        setTimer(59)
+        interval(1000).pipe(
+            rxjsMap(i => {
+                return timer - i;
+            }),
+            take(3)
+        ).subscribe(res => {
+            // console.log(res);
+            if (res !== 58) {
+                setTimer(res);
+            } else {
+                setTimer(res);
+                setVcodeStatus(false);
+            }
+            // console.log(timer);
+        });
+    };
     const submitForm = () => {
         console.log(phone, vcode);
+        props.onLogin(true);
     };
+
+    useEffect(() => {
+        console.log(timer);
+        // console.log(vcodeStatus);
+    });
 
     return (
         <Flex className="Login" direction="row" justify="center" align="center">
             <Flex.Item>
                 <List renderHeader={always('电话号码登陆')} /* renderFooter={errorTip} */>
-                    <ListItem>
+                    <ListItem >
                         <InputItem {...phoneFiled}
                             clear type="phone" placeholder="请输入手机号"
                             error={!!getFieldError(Options.Phone)}
                             onErrorClick={() => Toast.info('请输入11位手机号')}
                         >手机号</InputItem>
+                    </ListItem>
+                    <ListItem extra={
+                        <Button className="captcha-btn" type="ghost" size="small" inline
+                            disabled={vcodeStatus}
+                            onClick={getVcode}>
+                            {!vcodeStatus ? '获取验证码' : `${timer}s后获取`}
+                        </Button>
+                    }>
                         <InputItem {...vcodeFiled}
                             clear type="digit" placeholder="请输入验证码"
                             error={!!getFieldError(Options.Captcha)}
@@ -67,7 +106,7 @@ const SignInForm = (props: { form: formShape, onLogin: Function }) => {
                         >验证码</InputItem>
                     </ListItem>
                     <WhiteSpace size="lg" />
-                    <ListItem>
+                    <ListItem >
                         <Button type="primary" disabled={hasEmptyOrInvalid} onClick={submitForm}>登陆</Button>
                     </ListItem>
                 </List>

@@ -1,6 +1,5 @@
 import React from 'react';
-import { Loging } from './login/Login';
-import { SignIn } from './login/sign-in';
+import { SignIn } from './sign-in/sign-in';
 import { AppTabs } from './app-tabs/AppTabs';
 // import { ErrorBoundary } from './components/Error-Boundary';
 import './App.scss';
@@ -13,9 +12,8 @@ export class App extends React.Component {
         this.state = { isLogin: false };
     }
 
-    public onLoginHandler(): void {
-        console.log('login')
-        this.setState({ isLogin: true });
+    public onLoginHandler(isLogin: boolean): void {
+        this.setState({ isLogin });
     }
 
     public render(): any {
