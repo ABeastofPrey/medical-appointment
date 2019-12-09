@@ -1,6 +1,6 @@
 import React from 'react';
 import { Loging } from './login/Login';
-import { SignIn } from './login/sign';
+import { SignIn } from './login/sign-in';
 import { AppTabs } from './app-tabs/AppTabs';
 // import { ErrorBoundary } from './components/Error-Boundary';
 import './App.scss';
