@@ -34,7 +34,7 @@ const vcodeValidator = (rule, value: string, callback: Function) => {
 
 const SignInForm = (props: { form: formShape, onLogin: Function }) => {
     const { getFieldProps, getFieldError } = props.form;
-    const [vcodeStatus, setVcodeStatus] = useState(false);
+    const [vcodeState, setvcodeState] = useState(false);
     const [timer, setTimer] = useState(59);
     const phoneFiled = getFieldProps(Options.Phone, {
         rules: [
@@ -53,22 +53,13 @@ const SignInForm = (props: { form: formShape, onLogin: Function }) => {
     const hasEmpty = !phone || !vcode;
     const hasEmptyOrInvalid = hasEmpty || errorTip;
     const getVcode = () => {
-        setVcodeStatus(true);
-        setTimer(59)
+        setvcodeState(true);
         interval(1000).pipe(
-            rxjsMap(i => {
-                return timer - i;
-            }),
+            rxjsMap(i => timer - i),
             take(3)
         ).subscribe(res => {
-            // console.log(res);
-            if (res !== 58) {
-                setTimer(res);
-            } else {
-                setTimer(res);
-                setVcodeStatus(false);
-            }
-            // console.log(timer);
+            setTimer(res);
+            (res === 57) && setvcodeState(false);
         });
     };
     const submitForm = () => {
@@ -77,9 +68,8 @@ const SignInForm = (props: { form: formShape, onLogin: Function }) => {
     };
 
     useEffect(() => {
-        console.log(timer);
-        // console.log(vcodeStatus);
-    });
+        !vcodeState && setTimer(59);
+    }, [vcodeState]);
 
     return (
         <Flex className="Login" direction="row" justify="center" align="center">
@@ -94,9 +84,9 @@ const SignInForm = (props: { form: formShape, onLogin: Function }) => {
                     </ListItem>
                     <ListItem extra={
                         <Button className="captcha-btn" type="ghost" size="small" inline
-                            disabled={vcodeStatus}
+                            disabled={vcodeState}
                             onClick={getVcode}>
-                            {!vcodeStatus ? '获取验证码' : `${timer}s后获取`}
+                            {!vcodeState ? '获取验证码' : `${timer}s后获取`}
                         </Button>
                     }>
                         <InputItem {...vcodeFiled}
