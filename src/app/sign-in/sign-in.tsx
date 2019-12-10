@@ -4,6 +4,8 @@ import { List, InputItem, Button, Toast, Flex, WhiteSpace } from 'antd-mobile';
 import { always } from 'ramda';
 import { interval } from 'rxjs';
 import { take, map as rxjsMap } from 'rxjs/operators';
+import { connect } from 'react-redux';
+import { getVcode } from './user.actions';
 import './sign-in.scss';
 
 enum Options {
@@ -106,3 +108,15 @@ const SignInForm = (props: { form: formShape, onLogin: Function }) => {
 };
 
 export const SignIn = createForm()(SignInForm);
+
+class STest extends React.Component {
+    public render(): any {
+        return (
+            <Button onClick={() => {
+                (this.props as any).getVcode(10086);
+            }}>Get Vcode</Button>
+        );
+    }
+}
+
+export const SignInTest: any = connect(null, { getVcode })(STest);
