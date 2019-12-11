@@ -34,7 +34,7 @@ const vcodeValidator = (rule, value: string, callback: Function) => {
     }
 };
 
-const SignInForm = (props: { form: formShape, onLogin: Function, getVcode: Function }) => {
+const SignInComponent = (props: { form: formShape, onLogin: Function, getVcode: Function }) => {
     const { getFieldProps, getFieldError } = props.form;
     const [vcodeState, setvcodeState] = useState(false);
     const [timer, setTimer] = useState(59);
@@ -105,6 +105,6 @@ const SignInForm = (props: { form: formShape, onLogin: Function, getVcode: Funct
     );
 };
 
-export const SignIn = createForm()(SignInForm);
+export const SignInForm = createForm()(SignInComponent);
 
-export const SignInComponent: any = connect(null, { getVcode })(SignIn);
+export const SignIn: any = connect(null, { getVcode })(SignInForm);
