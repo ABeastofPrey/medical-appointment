@@ -1,33 +1,39 @@
-import pino from 'pino';
-import Koa from 'koa';
-// import cors from 'koa2-cors';
-// import { Server } from 'http';
-// import * as notifier from 'node-notifier';
+import fs from 'fs';
+import Koa from 'koa';import pino from 'pino';
+import path from 'path';
+import { createServer } from 'https';
 import { routes } from './modules/user/routes';
-import { compose, ifElse, isNil, path, always } from 'ramda';
-import { allowCrossDomain } from './middlewares/cross-domain';
+import { compose as rCompose, ifElse, isNil, path as attrPath, always, useWith, curry } from 'ramda';
+import { allowOrigin, allowMethods } from './middlewares/cross-domain';
+import compose from 'koa-compose';
+// import * as notifier from 'node-notifier';
 
-const server = new Koa();
+// 跨域白名单
 const whiteList = ['http://localhost:3000'];
 
-// app.use(cors());
+//根据项目的路径导入生成的证书文件
+const privateKey = fs.readFileSync(path.join(__dirname, './assets/certificate/server.key'), 'utf8');
+const certificate = fs.readFileSync(path.join(__dirname, './assets/certificate/server.crt'), 'utf8');
+const credentials = { key: privateKey, cert: certificate };
 
-const portPath = path(['env', 'Port']);
+const processPort = attrPath(['env', 'Port']);
+
+const getPort = rCompose(ifElse(isNil, always(8080), always), processPort);
 
 const logger = pino({ prettyPrint: { colorize: true, ignore: 'time' } });
 
-const startLog = x => { logger.info(x); return x; };
+const registRoutes = _server => _server.use(routes);
 
-const getPort = ifElse(isNil, always(8080), always);
+// const registMiddleware = mw => _server => _server.use(mw);
 
-const registRoutes = _app => _app.use(routes);
+const registMiddlewares = ([...mws]) => _server => _server.use(compose(mws));
 
-const registMiddleware = mw => _app => _app.use(mw);
+const httpsServer = _server =>  createServer(credentials, _server.callback());
 
-const listen = (port: number) => server.listen(port);
+const registCrossDomain = registMiddlewares([allowOrigin(whiteList), allowMethods]);
 
-const listenOnPort = compose(listen, startLog, getPort, always(portPath(process)));
+const getHttpsServer = rCompose(httpsServer, registRoutes, registCrossDomain);
 
-const registCrossDomain = registMiddleware(allowCrossDomain(whiteList));
+const startHttpsServer = curry((port, _server) => _server.listen(port, always(logger.info(port))));
 
-export const startServer = () => compose(listenOnPort, registRoutes, registCrossDomain)(server);
+export const startServer = () => useWith(startHttpsServer, [getPort, getHttpsServer])(process, new Koa());
