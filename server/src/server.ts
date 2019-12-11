@@ -1,11 +1,16 @@
 import pino from 'pino';
 import Koa from 'koa';
+// import cors from 'koa2-cors';
 // import { Server } from 'http';
 // import * as notifier from 'node-notifier';
 import { routes } from './modules/user/routes';
 import { compose, ifElse, isNil, path, always } from 'ramda';
+import { allowCrossDomain } from './middlewares/cross-domain';
 
-const koa = new Koa();
+const server = new Koa();
+const whiteList = ['http://localhost:3000'];
+
+// app.use(cors());
 
 const portPath = path(['env', 'Port']);
 
@@ -17,10 +22,12 @@ const getPort = ifElse(isNil, always(8080), always);
 
 const registRoutes = _app => _app.use(routes);
 
-// const registMiddlewares = mw => _app => _app.use(mw);
+const registMiddleware = mw => _app => _app.use(mw);
 
-const listen = (port: number) => koa.listen(port);
+const listen = (port: number) => server.listen(port);
 
 const listenOnPort = compose(listen, startLog, getPort, always(portPath(process)));
 
-export const startServer = () => compose(listenOnPort, registRoutes)(koa);
+const registCrossDomain = registMiddleware(allowCrossDomain(whiteList));
+
+export const startServer = () => compose(listenOnPort, registRoutes, registCrossDomain)(server);
