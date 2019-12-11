@@ -86,14 +86,11 @@ const SignInForm = (props: { form: formShape, onLogin: Function, getVcode: Funct
                         >手机号</InputItem>
                     </ListItem>
                     <ListItem extra={
-                        <Button className="captcha-btn" type="ghost" size="small" inline
-                            disabled={vcodeState}
-                            onClick={getVcode}>
+                        <Button type="ghost" size="small" inline disabled={vcodeState} onClick={getVcode}>
                             {!vcodeState ? '获取验证码' : `${timer}s后获取`}
                         </Button>
                     }>
-                        <InputItem {...vcodeFiled}
-                            clear type="digit" placeholder="请输入验证码"
+                        <InputItem {...vcodeFiled} clear type="digit" placeholder="请输入验证码"
                             error={!!getFieldError(Options.Captcha)}
                             onErrorClick={() => Toast.info('请输入正确的验证码')}
                         >验证码</InputItem>
