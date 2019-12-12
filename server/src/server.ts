@@ -1,5 +1,6 @@
 import fs from 'fs';
-import Koa from 'koa';import pino from 'pino';
+import Koa from 'koa';
+import pino from 'pino';
 import path from 'path';
 import { createServer } from 'https';
 import { routes } from './modules/user/routes';

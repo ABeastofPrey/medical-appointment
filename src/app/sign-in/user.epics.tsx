@@ -5,7 +5,7 @@ import { ajax } from 'rxjs/ajax';
 import { UserAction, UserActionTypes, getVcodeSuccess } from './user.actions';
 
 // const url = 'http://localhost:8080/user';
-const url = 'https://localhost:8001';
+const url = 'user';
 const options = {
     url,
     headers: {
@@ -20,7 +20,7 @@ export const userEpic = action$ => {
             ajax(options).subscribe(res => {
                 console.log(res);
             });
-            console.log(action.payload);
+            console.log(process.env);
             return of(1234);
         }),
         map((res: number) => getVcodeSuccess(res))
