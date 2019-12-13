@@ -1,23 +1,14 @@
 import { ofType } from 'redux-observable';
 import { mergeMap, map } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { ajax } from 'rxjs/ajax';
 import { UserAction, UserActionTypes, getVcodeSuccess } from './user.actions';
-
-// const url = 'http://localhost:8080/user';
-const url = 'user';
-const options = {
-    url,
-    headers: {
-
-    }
-};
+import { getVcode } from './user.api';
 
 export const userEpic = action$ => {
     return action$.pipe(
         ofType(UserActionTypes.GET_VCODE),
         mergeMap((action: UserAction) => {
-            ajax(options).subscribe(res => {
+            getVcode().subscribe(res => {
                 console.log(res);
             });
             console.log(process.env);
