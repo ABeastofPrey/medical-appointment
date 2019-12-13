@@ -26,6 +26,7 @@
     "koa-body": "^4.1.0",
     "koa-compose": "^4.1.0",
     "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
     "pino": "^5.12.2",
     "ramda": "^0.26.1",
     "ramda-adjunct": "^2.16.1"

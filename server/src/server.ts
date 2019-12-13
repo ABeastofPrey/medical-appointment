@@ -7,6 +7,7 @@ import { routes } from './modules/user/routes';
 import { compose as rCompose, ifElse, isNil, path as attrPath, always, useWith, curry } from 'ramda';
 import { allowOrigin, allowMethods } from './middlewares/cross-domain';
 import compose from 'koa-compose';
+import { staticServe } from './middlewares/static-serve';
 // import * as notifier from 'node-notifier';
 
 // 跨域白名单
@@ -25,7 +26,7 @@ const logger = pino({ prettyPrint: { colorize: true, ignore: 'time' } });
 
 const registRoutes = _server => _server.use(routes);
 
-// const registMiddleware = mw => _server => _server.use(mw);
+const registMiddleware = mw => _server => _server.use(mw);
 
 const registMiddlewares = ([...mws]) => _server => _server.use(compose(mws));
 
@@ -33,7 +34,7 @@ const httpsServer = _server =>  createServer(credentials, _server.callback());
 
 const registCrossDomain = registMiddlewares([allowOrigin(whiteList), allowMethods]);
 
-const getHttpsServer = rCompose(httpsServer, registRoutes, registCrossDomain);
+const getHttpsServer = rCompose(httpsServer, registRoutes, registMiddleware(staticServe), registCrossDomain);
 
 const startHttpsServer = curry((port, _server) => _server.listen(port, always(logger.info(port))));
 
