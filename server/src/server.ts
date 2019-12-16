@@ -2,11 +2,11 @@ import fs from 'fs';
 import Koa from 'koa';
 import pino from 'pino';
 import path from 'path';
+import compose from 'koa-compose';
 import { createServer } from 'https';
 import { routes } from './modules/user/routes';
 import { compose as rCompose, ifElse, isNil, path as attrPath, always, useWith, curry } from 'ramda';
 import { allowOrigin, allowMethods } from './middlewares/cross-domain';
-import compose from 'koa-compose';
 import { staticServe } from './middlewares/static-serve';
 // import * as notifier from 'node-notifier';
 
