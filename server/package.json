@@ -6,6 +6,8 @@
   "license": "MIT",
   "scripts": {
     "start": "tsnd --respawn --notify=false --transpileOnly --pretty=true index.ts",
+    "serve": "node ./dist/index.js",
+    "build": "tsc",
     "lint": "tslint 'src/**/*.ts' "
   },
   "devDependencies": {
