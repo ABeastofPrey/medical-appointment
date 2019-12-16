@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavBar, Icon } from 'antd-mobile';
-import './Header.scss';
+import './header.scss';
 
 export class Header extends React.Component {
     private leftClickHandler(e: any): void {

@@ -1,5 +1,5 @@
 import React from "react";
-import './Appointment.scss';
+import './appointment.scss';
 
 export const Appointment: React.FC = () => (
     <div>

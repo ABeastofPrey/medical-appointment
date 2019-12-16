@@ -1,8 +1,8 @@
 import React from 'react';
 import { SignIn } from './sign-in/sign-in';
-import { AppTabs } from './app-tabs/AppTabs';
+import { AppTabs } from './app-tabs/app-tabs';
 // import { ErrorBoundary } from './components/Error-Boundary';
-import './App.scss';
+import './app.scss';
 
 export class App extends React.Component {
     readonly state: { isLogin: boolean }

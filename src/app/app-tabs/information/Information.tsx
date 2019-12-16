@@ -1,5 +1,5 @@
 import React from "react";
-import './Information.scss';
+import './information.scss';
 
 export const Information: React.FC = () => (
     <div>

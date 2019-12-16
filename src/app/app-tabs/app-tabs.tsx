@@ -1,8 +1,8 @@
 import React from 'react';
 import { TabBar, Icon } from 'antd-mobile';
-import { Appointment } from './appointment/Appointment';
-import { Information } from './information/Information';
-import { Header } from '../header/Header';
+import { Appointment } from './appointment/appointment';
+import { Information } from './information/information';
+import { Header } from '../header/header';
 import { equals } from 'ramda';
 
 export enum MainTabs {
