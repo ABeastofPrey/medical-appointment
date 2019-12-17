@@ -6,8 +6,8 @@
   "license": "MIT",
   "scripts": {
     "start": "tsnd --respawn --notify=false --transpileOnly --pretty=true index.ts",
-    "serve": "node ./dist/index.js",
-    "build": "tsc",
+    "serve": "node ./dist/server.js",
+    "build": "webpack",
     "lint": "tslint 'src/**/*.ts' "
   },
   "devDependencies": {
@@ -16,12 +16,15 @@
     "@types/node": "^11.13.2",
     "@types/pino": "^5.8.6",
     "@types/ramda": "^0.26.6",
+    "awesome-typescript-loader": "^5.2.1",
     "pino-pretty": "^2.6.0",
     "ts-node-dev": "^1.0.0-pre.32",
     "tslint": "^5.15.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-eslint-rules": "^5.4.0",
-    "typescript": "^3.6.3"
+    "typescript": "^3.6.3",
+    "webpack": "^4.41.3",
+    "webpack-cli": "^3.3.10"
   },
   "dependencies": {
     "koa": "^2.9.0",
