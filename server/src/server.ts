@@ -4,7 +4,7 @@ import pino from 'pino';
 import path from 'path';
 import compose from 'koa-compose';
 import { createServer } from 'https';
-import { routes } from './modules/user/routes';
+import { routes } from './modules/routes';
 import { compose as rCompose, ifElse, isNil, path as attrPath, always, useWith, curry } from 'ramda';
 import { allowOrigin, allowMethods } from './middlewares/cross-domain';
 import { staticServe } from './middlewares/static-serve';
