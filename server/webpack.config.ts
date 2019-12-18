@@ -1,6 +1,7 @@
-import { CheckerPlugin } from 'awesome-typescript-loader';
 import path from 'path';
 import webpack from 'webpack';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import { CheckerPlugin } from 'awesome-typescript-loader';
 
 const config: webpack.Configuration = {
     mode: 'production',
@@ -17,17 +18,16 @@ const config: webpack.Configuration = {
             test: /\.ts$/,
             use: 'awesome-typescript-loader',
             exclude: path.resolve(__dirname, 'node_modules'),
-        },
-        // {
-        //     test: /\.(crt|key)$/i,
-        //     loader: 'file-loader',
-        //     options: {
-        //         name: '[path][name].[ext]',
-        //     }
-        // }
-        ]
+        }]
     },
-    plugins: [new CheckerPlugin(), new webpack.NormalModuleReplacementPlugin(/^any-promise$/, 'pinkie-promise')],
+    plugins: [
+        new CheckerPlugin(),
+        new webpack.NormalModuleReplacementPlugin(/^any-promise$/, 'pinkie-promise'),
+        new CopyWebpackPlugin([{
+            from: path.resolve(__dirname) + '/src/assets',
+            to: path.resolve(__dirname) + '/dist/assets'
+        }]),
+    ],
     resolve: {
         extensions: ['.ts', '.js']
     },
