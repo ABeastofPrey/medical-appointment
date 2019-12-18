@@ -8,6 +8,7 @@ import { routes } from './modules/routes';
 import { compose as rCompose, ifElse, isNil, path as attrPath, always, useWith, curry } from 'ramda';
 import { allowOrigin, allowMethods } from './middlewares/cross-domain';
 import { staticServe } from './middlewares/static-serve';
+import { setLogger } from './middlewares/logger';
 // import * as notifier from 'node-notifier';
 
 // 跨域白名单
@@ -30,11 +31,11 @@ const registMiddleware = mw => _server => _server.use(mw);
 
 const registMiddlewares = ([...mws]) => _server => _server.use(compose(mws));
 
-const httpsServer = _server =>  createServer(credentials, _server.callback());
+const httpsServer = _server => createServer(credentials, _server.callback());
 
 const registCrossDomain = registMiddlewares([allowOrigin(whiteList), allowMethods]);
 
-const getHttpsServer = rCompose(httpsServer, registRoutes, registMiddleware(staticServe), registCrossDomain);
+const getHttpsServer = rCompose(httpsServer, registRoutes, registMiddleware(staticServe), registMiddleware(setLogger(logger)), registCrossDomain);
 
 const startHttpsServer = curry((port, _server) => _server.listen(port, always(logger.info(port))));
 
