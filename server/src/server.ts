@@ -9,8 +9,6 @@ import { compose as rCompose, ifElse, isNil, path as attrPath, always, useWith, 
 import { allowOrigin, allowMethods } from './middlewares/cross-domain';
 import { staticServe } from './middlewares/static-serve';
 // import * as notifier from 'node-notifier';
-// import * as key from './assets/certificate/server.key';
-// import * as crt from './assets/certificate/server.crt';
 
 // 跨域白名单
 const whiteList = ['http://localhost:3000'];
