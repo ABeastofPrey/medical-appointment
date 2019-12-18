@@ -1,6 +1,7 @@
-export const queryLog = async(ctx, next) => {
+export const queryLog = async (ctx, next) => {
+    const { logger, method, url } = ctx;
     const st: number = new Date().getTime();
     await next();
     const ms = (new Date()).getTime() - st;
-    console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
+    logger.info(`${method} ${url} - ${ms}ms`);
 };

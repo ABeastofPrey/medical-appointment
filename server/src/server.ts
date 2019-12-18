@@ -9,6 +9,7 @@ import { compose as rCompose, ifElse, isNil, path as attrPath, always, useWith, 
 import { allowOrigin, allowMethods } from './middlewares/cross-domain';
 import { staticServe } from './middlewares/static-serve';
 import { setLogger } from './middlewares/logger';
+import { queryLog } from './middlewares/query-log';
 // import * as notifier from 'node-notifier';
 
 // 跨域白名单
@@ -27,7 +28,7 @@ const logger = pino({ prettyPrint: { colorize: true, ignore: 'time' } });
 
 const registRoutes = _server => _server.use(routes);
 
-const registMiddleware = mw => _server => _server.use(mw);
+// const registMiddleware = mw => _server => _server.use(mw);
 
 const registMiddlewares = ([...mws]) => _server => _server.use(compose(mws));
 
@@ -35,7 +36,7 @@ const httpsServer = _server => createServer(credentials, _server.callback());
 
 const registCrossDomain = registMiddlewares([allowOrigin(whiteList), allowMethods]);
 
-const getHttpsServer = rCompose(httpsServer, registRoutes, registMiddleware(staticServe), registMiddleware(setLogger(logger)), registCrossDomain);
+const getHttpsServer = rCompose(httpsServer, registRoutes, registMiddlewares([setLogger(logger), queryLog, staticServe,]), registCrossDomain);
 
 const startHttpsServer = curry((port, _server) => _server.listen(port, always(logger.info(port))));
 
