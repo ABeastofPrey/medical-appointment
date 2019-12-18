@@ -8,10 +8,9 @@ export const userEpic = action$ => {
     return action$.pipe(
         ofType(UserActionTypes.GET_VCODE),
         mergeMap((action: UserAction) => {
-            getVcode().subscribe(res => {
+            getVcode(action.payload.phone).subscribe(res => {
                 console.log(res);
             });
-            console.log(process.env);
             return of(1234);
         }),
         map((res: number) => getVcodeSuccess(res))

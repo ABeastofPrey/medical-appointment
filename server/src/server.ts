@@ -3,6 +3,7 @@ import Koa from 'koa';
 import pino from 'pino';
 import path from 'path';
 import compose from 'koa-compose';
+import bodyParser from 'koa-bodyparser';
 import { createServer } from 'https';
 import { routes } from './modules/routes';
 import { compose as rCompose, ifElse, isNil, path as attrPath, always, useWith, curry } from 'ramda';
@@ -36,7 +37,7 @@ const httpsServer = _server => createServer(credentials, _server.callback());
 
 const registCrossDomain = registMiddlewares([allowOrigin(whiteList), allowMethods]);
 
-const getHttpsServer = rCompose(httpsServer, registRoutes, registMiddlewares([setLogger(logger), queryLog, staticServe,]), registCrossDomain);
+const getHttpsServer = rCompose(httpsServer, registRoutes, registMiddlewares([setLogger(logger), queryLog, staticServe, bodyParser()]), registCrossDomain);
 
 const startHttpsServer = curry((port, _server) => _server.listen(port, always(logger.info(port))));
 

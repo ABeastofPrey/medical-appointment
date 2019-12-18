@@ -55,7 +55,7 @@ const SignInComponent = (props: { form: formShape, onLogin: Function, getVcode: 
     const hasEmpty = !phone || !vcode;
     const hasEmptyOrInvalid = hasEmpty || errorTip;
     const getVcode = () => {
-        props.getVcode(10086);
+        props.getVcode(phone);
         setvcodeState(true);
         interval(1000).pipe(
             rxjsMap(i => timer - i),
@@ -86,11 +86,12 @@ const SignInComponent = (props: { form: formShape, onLogin: Function, getVcode: 
                         >手机号</InputItem>
                     </ListItem>
                     <ListItem extra={
-                        <Button type="ghost" size="small" inline disabled={vcodeState} onClick={getVcode}>
+                        <Button type="ghost" size="small" inline disabled={vcodeState || !phone || getFieldError(Options.Phone)} onClick={getVcode}>
                             {!vcodeState ? '获取验证码' : `${timer}s后获取`}
                         </Button>
                     }>
-                        <InputItem {...vcodeFiled} clear type="digit" placeholder="请输入验证码"
+                        <InputItem {...vcodeFiled} clear type="number" 
+                            placeholder="请输入验证码" maxLength={4}
                             error={!!getFieldError(Options.Captcha)}
                             onErrorClick={() => Toast.info('请输入正确的验证码')}
                         >验证码</InputItem>
