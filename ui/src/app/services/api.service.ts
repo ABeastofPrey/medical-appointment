@@ -1,8 +1,8 @@
-import { ajax } from 'rxjs/ajax';
-import { map, catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { ajax, AjaxResponse, AjaxError } from 'rxjs/ajax';
+import { catchError } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
 
-const crud = method => (url, data?: Object) => {
+const crud = method => (url: string, data?: Object): Observable<AjaxResponse | AjaxError> => {
     return ajax({
         url,
         method,
@@ -14,13 +14,10 @@ const crud = method => (url, data?: Object) => {
             rxjs: JSON.stringify(data)
         }
     }).pipe(
-        map(res => {
-            // console.log(res);
-            return res;
-        }),
-        catchError(err => {
-            console.log('error: ', err);
-            return of(err);
+        // map(res => res),
+        catchError((err: AjaxError) => {
+            console.log(err);
+            return throwError(err);
         })
     );
 };
