@@ -27,8 +27,6 @@ const getPort = rCompose(ifElse(isNil, always(8080), always), processPort);
 
 const logger = pino({ prettyPrint: { colorize: true, ignore: 'time' } });
 
-const registRoutes = _server => _server.use(routes);
-
 // const registMiddleware = mw => _server => _server.use(mw);
 
 const registMiddlewares = ([...mws]) => _server => _server.use(compose(mws));
@@ -37,8 +35,10 @@ const httpsServer = _server => createServer(credentials, _server.callback());
 
 const registCrossDomain = registMiddlewares([allowOrigin(whiteList), allowMethods]);
 
-const getHttpsServer = rCompose(httpsServer, registRoutes, registMiddlewares([setLogger(logger), queryLog, staticServe, bodyParser()]), registCrossDomain);
+// const getHttpsServer = _server => compose(httpsServer, registCrossDomain);
+
+const getServer = rCompose(httpsServer, registCrossDomain, registMiddlewares([setLogger(logger), queryLog, staticServe, routes]));
 
 const startHttpsServer = curry((port, _server) => _server.listen(port, always(logger.info(port))));
 
-export const startServer = () => useWith(startHttpsServer, [getPort, getHttpsServer])(process, new Koa());
+export const startServer = () => useWith(startHttpsServer, [getPort, getServer])(process, new Koa());
