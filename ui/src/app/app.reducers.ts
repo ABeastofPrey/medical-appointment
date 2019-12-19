@@ -1,4 +1,4 @@
 import { combineReducers } from 'redux';
-import { users } from './sign-in/user.reducers';
+import { users } from './store/sign-in/user.reducers';
 
 export const rootReducer = combineReducers({ users });
