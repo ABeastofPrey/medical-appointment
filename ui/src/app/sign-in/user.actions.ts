@@ -15,9 +15,9 @@ export const getVcode = (phone: number): UserAction => {
     };
 };
 
-export const getVcodeSuccess = (vcode: number): UserAction => {
+export const getVcodeSuccess = (_payload: { phone: number, vcode: number }): UserAction => {
     return {
         type: UserActionTypes.GET_VCODE_SUCCESS,
-        payload: { vcode }
+        payload: { ..._payload }
     };
 };

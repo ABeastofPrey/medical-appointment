@@ -1,12 +1,12 @@
 import { UserAction, UserActionTypes } from './user.actions';
 
-const initialState = { vcode: null };
+const initialState = { vcode: null, phone: null };
 
 export const users = (state = initialState, action: UserAction) => {
     switch (action.type) {
         case UserActionTypes.GET_VCODE_SUCCESS: {
-            const { vcode } = action.payload;
-            return { ...state, vcode };
+            const { phone, vcode } = action.payload;
+            return { ...state, vcode, phone };
         }
         default: return state;
     }

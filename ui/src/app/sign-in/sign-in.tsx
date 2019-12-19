@@ -6,6 +6,7 @@ import { interval } from 'rxjs';
 import { take, map as rxjsMap } from 'rxjs/operators';
 import { connect } from 'react-redux';
 import { getVcode } from './user.actions';
+import { selectVcode, selectPhone } from './user.selectors';
 import './sign-in.scss';
 
 enum Options {
@@ -34,7 +35,7 @@ const vcodeValidator = (rule, value: string, callback: Function) => {
     }
 };
 
-const SignInComponent = (props: { form: formShape, onLogin: Function, getVcode: Function }) => {
+const SignInComponent = (props: { form: formShape, onLogin: Function, getVcode: Function, vcode: number, phone: number }) => {
     const { getFieldProps, getFieldError } = props.form;
     const [vcodeState, setvcodeState] = useState(false);
     const [timer, setTimer] = useState(59);
@@ -66,8 +67,13 @@ const SignInComponent = (props: { form: formShape, onLogin: Function, getVcode: 
         });
     };
     const submitForm = () => {
-        console.log(phone, vcode);
-        props.onLogin(true);
+        const isTheSamePhone = phone === props.phone;
+        const isCorrectVcode = parseInt(vcode) === props.vcode;
+        if (!isTheSamePhone || !isCorrectVcode) {
+            Toast.info('验证码不正确');
+        } else {
+            props.onLogin(true);
+        }
     };
 
     useEffect(() => {
@@ -106,6 +112,14 @@ const SignInComponent = (props: { form: formShape, onLogin: Function, getVcode: 
     );
 };
 
+const mapStateToProps = state => {
+    const vcode = selectVcode(state);
+    const phone = selectPhone(state);
+    return { phone, vcode };
+};
+
+const mapDispatchToProps = { getVcode };
+
 export const SignInForm = createForm()(SignInComponent);
 
-export const SignIn: any = connect(null, { getVcode })(SignInForm);
+export const SignIn: any = connect(mapStateToProps, mapDispatchToProps)(SignInForm);
