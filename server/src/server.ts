@@ -37,7 +37,7 @@ const registCrossDomain = registMiddlewares([allowOrigin(whiteList), allowMethod
 
 // const getHttpsServer = _server => compose(httpsServer, registCrossDomain);
 
-const getServer = rCompose(httpsServer, registCrossDomain, registMiddlewares([setLogger(logger), queryLog, staticServe, routes]));
+const getServer = rCompose(httpsServer, registCrossDomain, registMiddlewares([setLogger(logger), queryLog, staticServe, bodyParser(), routes]));
 
 const startHttpsServer = curry((port, _server) => _server.listen(port, always(logger.info(port))));
 
