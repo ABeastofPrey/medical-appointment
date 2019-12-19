@@ -1,5 +1,5 @@
 import React from 'react';
-import { SignIn } from './store/sign-in/sign-in';
+import LoginComponent from './store/login/component';
 import { AppTabs } from './store/app-tabs/app-tabs';
 // import { ErrorBoundary } from './components/Error-Boundary';
 import './app.scss';
@@ -19,7 +19,7 @@ export class App extends React.Component {
     public render(): any {
         return (
             <div className="App">
-                {this.state.isLogin ? <AppTabs /> : <SignIn onLogin={this.onLoginHandler.bind(this)}/>}
+                {this.state.isLogin ? <AppTabs /> : <LoginComponent onLogin={this.onLoginHandler.bind(this)}/>}
             </div>
         );
     }

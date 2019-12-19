@@ -5,9 +5,9 @@ import { always } from 'ramda';
 import { interval } from 'rxjs';
 import { take, map as rxjsMap } from 'rxjs/operators';
 import { connect } from 'react-redux';
-import { getVcode } from './user.actions';
-import { selectVcode, selectPhone } from './user.selectors';
-import './sign-in.scss';
+import { getVcode } from './actions';
+import { selectVcode, selectPhone } from './selectors';
+import './component.scss';
 
 enum Options {
     Phone = 'phoneNumber',
@@ -35,7 +35,7 @@ const vcodeValidator = (rule, value: string, callback: Function) => {
     }
 };
 
-const SignInComponent = (props: { form: formShape, onLogin: Function, getVcode: Function, vcode: number, phone: number }) => {
+const LoginComponent = (props: { form: formShape, onLogin: Function, getVcode: Function, vcode: number, phone: number }) => {
     const { getFieldProps, getFieldError } = props.form;
     const [vcodeState, setvcodeState] = useState(false);
     const [timer, setTimer] = useState(59);
@@ -120,6 +120,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = { getVcode };
 
-export const SignInForm = createForm()(SignInComponent);
+const LoginForm = createForm()(LoginComponent);
 
-export const SignIn: any = connect(mapStateToProps, mapDispatchToProps)(SignInForm);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm) as any;
