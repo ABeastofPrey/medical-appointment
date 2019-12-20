@@ -9,7 +9,7 @@ export const getVcode = async (ctx, next) => {
 };
 
 export const login = async (ctx, next) => {
-    console.log(ctx.request);
-    ctx.body = { isLogin: true };
+    const { phone, vcode } = ctx.request.body;
+    ctx.body = { phone, vcode, isLogin: true };
     await next();
 };

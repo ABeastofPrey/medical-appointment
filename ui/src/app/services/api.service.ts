@@ -7,12 +7,10 @@ const crud = method => (url: string, data?: Object): Observable<AjaxResponse | A
         url,
         method,
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json;charset=UTF-8',
             'rxjs-custom-header': 'Rxjs'
         },
-        body: {
-            rxjs: JSON.stringify(data)
-        }
+        body: JSON.stringify(data)
     }).pipe(
         // map(res => res),
         catchError((err: AjaxError) => {

@@ -4,6 +4,7 @@ import pino from 'pino';
 import path from 'path';
 import compose from 'koa-compose';
 import bodyParser from 'koa-bodyparser';
+import { createServer as createHttpServer } from 'http';
 import { createServer } from 'https';
 import { routes } from './modules/routes';
 import { compose as rCompose, ifElse, isNil, path as attrPath, always, useWith, curry } from 'ramda';
@@ -31,13 +32,17 @@ const logger = pino({ prettyPrint: { colorize: true, ignore: 'time' } });
 
 const registMiddlewares = ([...mws]) => _server => _server.use(compose(mws));
 
+const httpServer = _server => createHttpServer(_server.callback());
+
 const httpsServer = _server => createServer(credentials, _server.callback());
 
 const registCrossDomain = registMiddlewares([allowOrigin(whiteList), allowMethods]);
 
 // const getHttpsServer = _server => compose(httpsServer, registCrossDomain);
 
-const getServer = rCompose(httpsServer, registCrossDomain, registMiddlewares([setLogger(logger), queryLog, staticServe, bodyParser(), routes]));
+const getServer = rCompose(httpServer, registMiddlewares([setLogger(logger), bodyParser(), queryLog, staticServe, routes]));
+
+// const getServer = rCompose(httpsServer, registCrossDomain, registMiddlewares([setLogger(logger), bodyParser(), queryLog, staticServe, routes]));
 
 const startHttpsServer = curry((port, _server) => _server.listen(port, always(logger.info(port))));
 
