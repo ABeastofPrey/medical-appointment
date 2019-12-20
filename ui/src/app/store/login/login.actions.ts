@@ -15,7 +15,7 @@ export interface LoginAction {
 export const getVcode = (phone: number): LoginAction => {
     return {
         type: LoginActionTypes.GET_VCODE,
-        payload: { phone, vcode: null, success: null }
+        payload: { phone, vcode: null, isLogin: false }
     };
 };
 

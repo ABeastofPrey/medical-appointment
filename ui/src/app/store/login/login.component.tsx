@@ -1,22 +1,19 @@
 import React from 'react';
 import { createForm, formShape } from 'rc-form';
-import { List, InputItem, Button, Toast, Flex, WhiteSpace } from 'antd-mobile';
 import { always } from 'ramda';
 import { interval } from 'rxjs';
 import { take, map as rxjsMap } from 'rxjs/operators';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { List, InputItem, Button, Toast, Flex, WhiteSpace } from 'antd-mobile';
 import { getVcode, login } from './login.actions';
 import { selectVcode, selectPhone, selectLoginState } from './login.selectors';
-import { AppState } from '../../app.store';
 import './login.component.scss';
 
 enum Options {
     Phone = 'phoneNumber',
     Captcha = 'validationCode',
 }
-
 const { useState, useEffect } = React;
-
 const { Item: ListItem } = List;
 
 const phoneValidator = (rule, value, callback) => {
@@ -36,18 +33,9 @@ const vcodeValidator = (rule, value: string, callback: Function) => {
     }
 };
 
-const LoginComponent = (props: {
-    form: formShape,
-    vcode: number,
-    phone: number,
-    success: boolean,
-    onLogin: Function,
-    login: typeof login,
-    getVcode: typeof getVcode,
-}) => {
+const LoginComponent = (props: { form: formShape, onLogin: Function }) => {
     const { getFieldProps, getFieldError } = props.form;
-    const [vcodeState, setvcodeState] = useState(false);
-    const [timer, setTimer] = useState(59);
+    const { [Options.Phone]: phone, [Options.Captcha]: vcode } = props.form.getFieldsValue();
     const phoneFiled = getFieldProps(Options.Phone, {
         rules: [
             { required: true, message: '请输入手机号' },
@@ -61,11 +49,16 @@ const LoginComponent = (props: {
         ],
     });
     const errorTip = getFieldError(Options.Phone) || getFieldError(Options.Captcha);
-    const { [Options.Phone]: phone, [Options.Captcha]: vcode } = props.form.getFieldsValue();
     const hasEmpty = !phone || !vcode;
     const hasEmptyOrInvalid = hasEmpty || errorTip;
+    const [vcodeState, setvcodeState] = useState(false);
+    const [timer, setTimer] = useState(59);
+    const storePhone = useSelector(selectPhone);
+    const storeVcode = useSelector(selectVcode);
+    const storeStatus = useSelector(selectLoginState);
+    const dispatch = useDispatch();
     const fetchVcode = () => {
-        props.getVcode(phone);
+        dispatch(getVcode(phone));
         setvcodeState(true);
         interval(1000).pipe(
             rxjsMap(i => timer - i),
@@ -76,19 +69,17 @@ const LoginComponent = (props: {
         });
     };
     const submitForm = () => {
-        const isTheSamePhone = phone === props.phone;
-        const isCorrectVcode = parseInt(vcode) === props.vcode;
+        const isTheSamePhone = phone === storePhone;
+        const isCorrectVcode = parseInt(vcode) === storeVcode;
         if (!isTheSamePhone || !isCorrectVcode) {
             Toast.info('验证码不正确');
         } else {
-            props.login({ phone, vcode, success: null });
-            props.onLogin(true);
+            dispatch(login({ phone, vcode, isLogin: false }));
+            props.onLogin(false);
         }
     };
 
-    useEffect(() => {
-        !vcodeState && setTimer(59);
-    }, [vcodeState]);
+    useEffect(() => { !vcodeState && setTimer(59); }, [vcodeState]);
 
     return (
         <Flex className="Login" direction="row" justify="center" align="center">
@@ -122,15 +113,4 @@ const LoginComponent = (props: {
     );
 };
 
-const mapStateToProps = (state: AppState) => {
-    const vcode = selectVcode(state);
-    const phone = selectPhone(state);
-    const success = selectLoginState(state);
-    return { phone, vcode, success };
-};
-
-const mapDispatchToProps = { getVcode, login };
-
-const LoginForm = createForm()(LoginComponent);
-
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm) as any;
+export default createForm()(LoginComponent) as any;

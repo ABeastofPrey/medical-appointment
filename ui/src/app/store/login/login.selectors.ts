@@ -6,4 +6,4 @@ export const selectVcode = (state: AppState) => getLoginState(state).vcode;
 
 export const selectPhone = (state: AppState) => getLoginState(state).phone;
 
-export const selectLoginState = (state: AppState) => getLoginState(state).success;
+export const selectLoginState = (state: AppState) => getLoginState(state).isLogin;
