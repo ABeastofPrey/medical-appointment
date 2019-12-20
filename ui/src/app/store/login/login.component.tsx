@@ -55,7 +55,7 @@ const LoginComponent = (props: { form: formShape, onLogin: Function }) => {
     const [timer, setTimer] = useState(59);
     const storePhone = useSelector(selectPhone);
     const storeVcode = useSelector(selectVcode);
-    const storeStatus = useSelector(selectLoginState);
+    const storeLogin = useSelector(selectLoginState);
     const dispatch = useDispatch();
 
     const fetchVcode = () => {
@@ -85,8 +85,8 @@ const LoginComponent = (props: { form: formShape, onLogin: Function }) => {
     }, [vcodeState]);
 
     useEffect(() => {
-        storeStatus && props.onLogin(storeStatus);
-    }, [storeStatus]);
+        storeLogin && props.onLogin(storeLogin);
+    }, [storeLogin]);
 
     return (
         <Flex className="Login" direction="row" justify="center" align="center">
