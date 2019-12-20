@@ -1,10 +1,12 @@
 import Router from 'koa-router';
 import { user } from './user/controller';
-import { getVcode } from './rigister/controller';
+import { getVcode, login } from './rigister/controller';
 
 const router = new Router();
 
 router.get('/vcode', getVcode);
+
+router.post('/login', login);
 
 router.get('/user', user);
 

@@ -57,6 +57,7 @@ const LoginComponent = (props: { form: formShape, onLogin: Function }) => {
     const storeVcode = useSelector(selectVcode);
     const storeStatus = useSelector(selectLoginState);
     const dispatch = useDispatch();
+
     const fetchVcode = () => {
         dispatch(getVcode(phone));
         setvcodeState(true);
@@ -68,6 +69,7 @@ const LoginComponent = (props: { form: formShape, onLogin: Function }) => {
             (res === 57) && setvcodeState(false);
         });
     };
+
     const submitForm = () => {
         const isTheSamePhone = phone === storePhone;
         const isCorrectVcode = parseInt(vcode) === storeVcode;
@@ -75,11 +77,16 @@ const LoginComponent = (props: { form: formShape, onLogin: Function }) => {
             Toast.info('验证码不正确');
         } else {
             dispatch(login({ phone, vcode, isLogin: false }));
-            props.onLogin(false);
         }
     };
 
-    useEffect(() => { !vcodeState && setTimer(59); }, [vcodeState]);
+    useEffect(() => {
+        !vcodeState && setTimer(59);
+    }, [vcodeState]);
+
+    useEffect(() => {
+        storeStatus && props.onLogin(storeStatus);
+    }, [storeStatus]);
 
     return (
         <Flex className="Login" direction="row" justify="center" align="center">
@@ -90,18 +97,20 @@ const LoginComponent = (props: { form: formShape, onLogin: Function }) => {
                             clear type="phone" placeholder="请输入手机号"
                             error={!!getFieldError(Options.Phone)}
                             onErrorClick={() => Toast.info('请输入11位手机号')}
-                        >手机号</InputItem>
+                        >手机号
+                        </InputItem>
                     </ListItem>
                     <ListItem extra={
                         <Button type="ghost" size="small" inline disabled={vcodeState || !phone || getFieldError(Options.Phone)} onClick={fetchVcode}>
                             {!vcodeState ? '获取验证码' : `${timer}s后获取`}
-                        </Button>
-                    }>
+                        </Button>}
+                    >
                         <InputItem {...vcodeFiled} clear type="number"
                             placeholder="请输入验证码" maxLength={4}
                             error={!!getFieldError(Options.Captcha)}
                             onErrorClick={() => Toast.info('请输入正确的验证码')}
-                        >验证码</InputItem>
+                        >验证码
+                        </InputItem>
                     </ListItem>
                     <WhiteSpace size="lg" />
                     <ListItem >
