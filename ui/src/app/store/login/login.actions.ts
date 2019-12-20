@@ -1,4 +1,4 @@
-import { LoginState } from './model';
+import { LoginState } from './login.types';
 
 export enum LoginActionTypes {
     GET_VCODE = 'GET_VCODE',

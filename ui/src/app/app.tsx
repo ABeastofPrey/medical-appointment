@@ -1,5 +1,5 @@
 import React from 'react';
-import LoginComponent from './store/login/component';
+import LoginComponent from './store/login/login.component';
 import { AppTabs } from './store/app-tabs/app-tabs';
 // import { ErrorBoundary } from './components/Error-Boundary';
 import './app.scss';
