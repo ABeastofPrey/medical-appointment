@@ -7,6 +7,7 @@ import { take, map as rxjsMap } from 'rxjs/operators';
 import { connect } from 'react-redux';
 import { getVcode } from './actions';
 import { selectVcode, selectPhone } from './selectors';
+import { AppState } from '../../app.store';
 import './component.scss';
 
 enum Options {
@@ -112,7 +113,7 @@ const LoginComponent = (props: { form: formShape, onLogin: Function, getVcode: F
     );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: AppState) => {
     const vcode = selectVcode(state);
     const phone = selectPhone(state);
     return { phone, vcode };

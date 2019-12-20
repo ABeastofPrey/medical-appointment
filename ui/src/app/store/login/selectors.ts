@@ -1,5 +1,9 @@
-export const getLoginState = state => state.login;
+import { AppState } from '../../app.store';
 
-export const selectVcode = state => getLoginState(state).vcode;
+export const getLoginState = (state: AppState) => state.login;
 
-export const selectPhone = state => getLoginState(state).phone;
+export const selectVcode = (state: AppState) => getLoginState(state).vcode;
+
+export const selectPhone = (state: AppState) => getLoginState(state).phone;
+
+export const selectLoginState = (state: AppState) => getLoginState(state).success;

@@ -1,9 +1,9 @@
-import { Login } from './model';
+import { LoginState } from './model';
 import { LoginAction, LoginActionTypes } from './actions';
 
-const initialState: Login = { vcode: null, phone: null };
+const initialState: LoginState = { vcode: null, phone: null, success: null };
 
-export const login = (state = initialState, action: LoginAction): Login => {
+export const login = (state = initialState, action: LoginAction): LoginState => {
     switch (action.type) {
         case LoginActionTypes.GET_VCODE_SUCCESS: {
             const { phone, vcode } = action.payload;
