@@ -36,8 +36,9 @@ const vcodeValidator = (rule, value: string, callback: Function) => {
 };
 
 const LoginComponent = (props: { form: formShape, onLogin: Function }) => {
-    const { getFieldProps, getFieldError } = props.form;
-    const { [Options.Phone]: phone, [Options.Captcha]: vcode } = props.form.getFieldsValue();
+    const { form, onLogin } = props;
+    const { getFieldProps, getFieldError } = form;
+    const { [Options.Phone]: phone, [Options.Captcha]: vcode } = form.getFieldsValue();
     const phoneFiled = getFieldProps(Options.Phone, {
         rules: [
             { required: true, message: '请输入手机号' },
@@ -87,8 +88,8 @@ const LoginComponent = (props: { form: formShape, onLogin: Function }) => {
     }, [vcodeState]);
 
     useEffect(() => {
-        storeLogin && props.onLogin(storeLogin);
-    }, [storeLogin]);
+        storeLogin && onLogin(storeLogin);
+    }, [storeLogin, onLogin]);
 
     return (
         <Flex className="Login" direction="row" justify="center" align="center">
