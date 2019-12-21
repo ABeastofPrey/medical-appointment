@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { List, InputItem, Button, Toast, Flex, WhiteSpace } from 'antd-mobile';
 import { getVcode, login } from './login.actions';
 import { selectVcode, selectPhone, selectLoginState } from './login.selectors';
+import { Map } from 'immutable';
+import { LoginState } from './login.types';
 import './login.component.scss';
 
 enum Options {
@@ -76,7 +78,7 @@ const LoginComponent = (props: { form: formShape, onLogin: Function }) => {
         if (!isTheSamePhone || !isCorrectVcode) {
             Toast.info('验证码不正确');
         } else {
-            dispatch(login({ phone, vcode, isLogin: false }));
+            dispatch(login(Map({ phone: phone, vcode: vcode, isLogin: false }) as LoginState));
         }
     };
 

@@ -1,5 +1,5 @@
-export interface LoginState {
-    phone: number;
-    vcode: number;
-    isLogin: boolean;
-}
+import { Map } from 'immutable';
+
+export type loginKeys = 'phone' | 'vcode' | 'isLogin';
+
+export type LoginState = Map<loginKeys, number | boolean>;

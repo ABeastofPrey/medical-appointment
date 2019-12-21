@@ -12,7 +12,6 @@ const crud = method => (url: string, data?: Object): Observable<AjaxResponse | A
         },
         body: JSON.stringify(data)
     }).pipe(
-        // map(res => res),
         catchError((err: AjaxError) => {
             console.log(err);
             return throwError(err);

@@ -1,4 +1,5 @@
 import { LoginState } from './login.types';
+import { Map } from 'immutable';
 
 export enum LoginActionTypes {
     GET_VCODE = 'GET_VCODE',
@@ -15,27 +16,18 @@ export interface LoginAction {
 export const getVcode = (phone: number): LoginAction => {
     return {
         type: LoginActionTypes.GET_VCODE,
-        payload: { phone, vcode: null, isLogin: false }
+        payload: (Map({ phone: phone, vcode: null, isLogin: false }) as LoginState)
     };
 };
 
-export const getVcodeSuccess = (_payload: LoginState): LoginAction => {
-    return {
-        type: LoginActionTypes.GET_VCODE_SUCCESS,
-        payload: { ..._payload }
-    };
-};
+export const getVcodeSuccess = (payload: LoginState): LoginAction => ({
+    type: LoginActionTypes.GET_VCODE_SUCCESS, payload
+});
 
-export const login = (_payload: LoginState): LoginAction => {
-    return {
-        type: LoginActionTypes.LOGIN,
-        payload: { ..._payload }
-    };
-};
+export const login = (payload: LoginState): LoginAction => ({
+    type: LoginActionTypes.LOGIN, payload
+});
 
-export const loginSuccess = (_payload: LoginState): LoginAction => {
-    return {
-        type: LoginActionTypes.LOGIN_SUCCESS,
-        payload: { ..._payload }
-    };
-};
+export const loginSuccess = (payload: LoginState): LoginAction => ({
+    type: LoginActionTypes.LOGIN_SUCCESS, payload
+});
