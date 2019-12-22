@@ -13,6 +13,7 @@
   "devDependencies": {
     "@types/koa": "^2.11.0",
     "@types/koa-router": "^7.0.40",
+    "@types/mongoose": "^5.5.34",
     "@types/node": "^11.13.2",
     "@types/pino": "^5.8.6",
     "@types/ramda": "^0.26.6",
@@ -37,6 +38,7 @@
     "koa-compose": "^4.1.0",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
+    "mongoose": "^5.8.2",
     "pino": "^5.12.2",
     "ramda": "^0.26.1",
     "ramda-adjunct": "^2.16.1"

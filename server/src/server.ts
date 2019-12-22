@@ -6,12 +6,13 @@ import compose from 'koa-compose';
 import bodyParser from 'koa-bodyparser';
 import { createServer as createHttpServer } from 'http';
 import { createServer } from 'https';
-import { routes } from './modules/routes';
+import { routes } from './modules/app-routes';
 import { compose as rCompose, ifElse, isNil, path as attrPath, always, useWith, curry } from 'ramda';
 import { allowOrigin, allowMethods } from './middlewares/cross-domain';
 import { staticServe } from './middlewares/static-serve';
 import { setLogger } from './middlewares/logger';
 import { queryLog } from './middlewares/query-log';
+import { connect2DB } from './middlewares/mongo-db';
 // import * as notifier from 'node-notifier';
 
 // 跨域白名单
@@ -40,7 +41,7 @@ const registCrossDomain = registMiddlewares([allowOrigin(whiteList), allowMethod
 
 // const getHttpsServer = _server => compose(httpsServer, registCrossDomain);
 
-const getServer = rCompose(httpServer, registMiddlewares([setLogger(logger), bodyParser(), queryLog, staticServe, routes]));
+const getServer = rCompose(httpServer, registMiddlewares([setLogger(logger), bodyParser(), queryLog, staticServe, connect2DB(), routes]));
 
 // const getServer = rCompose(httpsServer, registCrossDomain, registMiddlewares([setLogger(logger), bodyParser(), queryLog, staticServe, routes]));
 
