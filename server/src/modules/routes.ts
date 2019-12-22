@@ -1,6 +1,6 @@
 import Router from 'koa-router';
-import { user } from './user/controller';
-import { getVcode, login } from './rigister/controller';
+import { user } from './user/user.controller';
+import { getVcode, login } from './rigister/rigister.controller';
 
 const router = new Router();
 
