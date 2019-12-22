@@ -1,27 +1,16 @@
+import { getUsers, getUserById, createUser, updateUser, deleteUser } from './user.controller';
+
 export const registUserRoutes = router => {
+
     router.prefix('/users')
 
-    router.get('/', function (ctx, next) {
-        ctx.body = '获取所有用户'
-    })
+    router.get('/', getUsers);
 
-    router.get('/:id', function (ctx, next) {
-        let id = ctx.params.id
-        ctx.body = '获取单个用户'
-    })
+    router.get('/:id', getUserById);
 
-    router.post('/', function (ctx, next) {
-        let data = ctx.request.body
-        ctx.body = '新增用户'
-    })
+    router.post('/', createUser);
 
-    router.put('/:id', function (ctx, next) {
-        let id = ctx.params.id
-        ctx.body = '修改用户信息'
-    })
+    router.put('/:id', updateUser);
 
-    router.delete('/:id', function (ctx, next) {
-        let id = ctx.params.id
-        ctx.body = '删除用户'
-    })
+    router.delete('/:id', deleteUser);
 };

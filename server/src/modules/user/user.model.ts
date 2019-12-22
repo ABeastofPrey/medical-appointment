@@ -1,13 +1,10 @@
 import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
-
-export interface IUser {
-    id: string;
-    name: string;
-}
+const { ObjectId } = mongoose.Types;
 
 const userSchema = new Schema({
+    // _id: { type: ObjectId },
     name: { type: String, sparse: true, trim: true },
     phone: { type: Number, required: [true, 'Phone cannot be empty'] },
     vcode: { type: Number, required: [true, 'Validation code cannot be empty'] },

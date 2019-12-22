@@ -12,6 +12,7 @@ const url = 'mongodb://localhost:27017/test';
 
 export const connect2DB = () => {
     mongoose.set('debug', true);
+    mongoose.set('useCreateIndex', true);
     mongoose.connect(url, options);
     const db = mongoose.connection;
     db.on('error', console.error.bind(console, '连接错误:'));
