@@ -37,7 +37,9 @@ function Child({callback}) {
     const [count, setCount] = useState(() => callback());
 
     function createNew() {
-        createUser();
+        createUser().subscribe(res => {
+            console.log(res);
+        });
     }
 
     useEffect(() => {
