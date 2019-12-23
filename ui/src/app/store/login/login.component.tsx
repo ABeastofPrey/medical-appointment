@@ -38,7 +38,8 @@ const vcodeValidator = (rule, value: string, callback: Function) => {
 const LoginComponent = (props: { form: formShape, onLogin: Function }) => {
     const { form, onLogin } = props;
     const { getFieldProps, getFieldError } = form;
-    const { [Options.Phone]: phone, [Options.Captcha]: vcode } = form.getFieldsValue();
+    let { [Options.Phone]: phone, [Options.Captcha]: vcode } = form.getFieldsValue();
+    phone = phone && (phone as string).split(' ').reduce((acc, x) => acc + x, ''); // trim phone
     const phoneFiled = getFieldProps(Options.Phone, {
         rules: [
             { required: true, message: '请输入手机号' },

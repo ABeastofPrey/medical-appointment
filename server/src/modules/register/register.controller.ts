@@ -1,4 +1,5 @@
 import { compose, multiply } from 'ramda';
+import { User } from '../user/user.model';
 
 export const getVcode = async (ctx, next) => {
     const { phone } = ctx.query;
@@ -10,6 +11,11 @@ export const getVcode = async (ctx, next) => {
 
 export const login = async (ctx, next) => {
     const { phone, vcode } = ctx.request.body;
-    ctx.body = { phone, vcode, isLogin: true };
+    const user = {
+        name: `Vip${phone}`,
+        phone,
+        vcode
+    };
+    ctx.body = await User.create(user);
     await next();
 };
