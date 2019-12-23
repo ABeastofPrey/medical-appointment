@@ -3,6 +3,7 @@ import './appointment.scss';
 
 import { useMemo, useCallback, useState, useEffect } from "react";
 import { range, reduce } from "ramda";
+import { createUser } from "./appointment.api";
 
 const set = new Set();
 export function Parent() {
@@ -35,13 +36,20 @@ export function Parent() {
 function Child({callback}) {
     const [count, setCount] = useState(() => callback());
 
+    function createNew() {
+        createUser();
+    }
+
     useEffect(() => {
         console.log('update child');
         setCount(callback());
     }, [callback]);
 
     return (
+        <>
         <h4>Child: {count}</h4>
+        <button onClick={createNew}>Create New One</button>
+        </>
     );
 }
 

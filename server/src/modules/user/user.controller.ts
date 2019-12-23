@@ -10,6 +10,7 @@ export const getUserById = async (ctx, next) => {
 };
 
 export const createUser = async (ctx, next) => {
+    console.log(ctx.query.body);
     const user = {
         name: "Mr.Devil",
         phone: 13585845436,

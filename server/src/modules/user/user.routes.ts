@@ -1,16 +1,14 @@
+import Router from 'koa-router';
 import { getUsers, getUserById, createUser, updateUser, deleteUser } from './user.controller';
 
-export const registUserRoutes = router => {
+export const userRouter = new Router();
 
-    router.prefix('/users')
+userRouter.get('/', getUsers);
 
-    router.get('/', getUsers);
+userRouter.get('/:id', getUserById);
 
-    router.get('/:id', getUserById);
+userRouter.post('/', createUser);
 
-    router.post('/', createUser);
+userRouter.put('/:id', updateUser);
 
-    router.put('/:id', updateUser);
-
-    router.delete('/:id', deleteUser);
-};
+userRouter.delete('/:id', deleteUser);

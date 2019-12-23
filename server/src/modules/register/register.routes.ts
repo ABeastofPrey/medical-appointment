@@ -1,7 +1,8 @@
+import Router from 'koa-router';
 import { getVcode, login } from './register.controller';
 
-export const registRegisterRoutes = router => {
-    router.get('/vcode', getVcode);
+export const registerRouter = new Router();
 
-    router.post('/login', login);
-};
+registerRouter.get('vcode', getVcode);
+
+registerRouter.post('login', login);

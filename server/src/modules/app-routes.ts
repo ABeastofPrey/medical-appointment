@@ -1,11 +1,9 @@
 import Router from 'koa-router';
-import { registUserRoutes } from './user/user.routes';
-import { registRegisterRoutes } from './register/register.routes';
+import { userRouter } from './user/user.routes';
+import { registerRouter } from './register/register.routes';
 
 export const router = new Router();
 
-registRegisterRoutes(router);
+router.use('/', registerRouter.routes(), registerRouter.allowedMethods());
 
-registUserRoutes(router);
-
-export const routes = router.routes();
+router.use('/users', userRouter.routes(), userRouter.allowedMethods());
